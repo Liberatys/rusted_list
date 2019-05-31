@@ -1,6 +1,6 @@
 # RustedList
 
-[![Crates.io](https://img.shields.io/badge/crate.io-v0.0.1-orange.svg)](https://crates.io/crates/imap)
+[![Crates.io](https://img.shields.io/badge/crate.io-v0.0.1-orange.svg)](https://crates.io/crates/rusted_list)
 
 The rusted-list is an all time sorted list that is keeping track of its values based on their relative position to the center/middle of the list/vector.
 
