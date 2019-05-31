@@ -2,7 +2,7 @@
 name = "rusted_list"
 version = "0.1.1"
 authors = ["Liberatys <Ilithium@protonmail.com>"]
-edition = "2019"
+edition = "2018"
 description = "A ever sorted list for rust"
 readme = "README.md"
 keywords = ["list","sorted","hacked"]
