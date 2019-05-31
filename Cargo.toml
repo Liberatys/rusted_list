@@ -9,4 +9,3 @@ keywords = ["list","sorted","hacked"]
 license = "MIT/Apache-2.0"
 
 [dependencies]
-num = "0.2"
