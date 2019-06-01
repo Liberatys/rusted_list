@@ -56,7 +56,6 @@ By keeping track of some "tower" elements in the list, we can insert the value e
 
 ## Big-O test
 
-
 After the implementation I will calculate the Big-O notation for the different operations on the list and will compare it to other implementations of an ever lasting sorted list.
 
 

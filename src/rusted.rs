@@ -49,15 +49,39 @@ impl RustedList {
                 self.center_track = element;
                 self.value_list.insert(1, element);
             }
+            self.center_track = self.value_list[self.center_index as usize];
         } else {
+            self.current_size = self.current_size + 1;
+            if element >= self.value_list[self.value_list.len() - 1] {
+                self.value_list.push(element);
+                return;
+            }
+            if element < self.value_list[0] {
+                self.value_list.insert(0, element);
+                return;
+            }
+            for i in 0..self.value_list.len() {
+                if element < self.value_list[i as usize] {
+                    self.value_list.insert(i - 1, element);
+                    return;
+                }
+            }
+            println!("Low: {}", element);
+            /*
             self.current_size = self.current_size + 1;
             if element < self.left_track {
                 self.left_track = element;
                 self.value_list.insert(0, element);
+                let center_set_index: i32 = (self.value_list.len() / 2) as i32;
+                self.center_index = center_set_index;
+                self.center_track = self.value_list[center_set_index as usize];
                 return;
             } else if element > self.right_track {
                 self.right_track = element;
                 self.value_list.push(element);
+                let center_set_index: i32 = (self.value_list.len() / 2) as i32;
+                self.center_index = center_set_index;
+                self.center_track = self.value_list[center_set_index as usize];
                 return;
             }
             if element > self.center_track {
@@ -78,8 +102,9 @@ impl RustedList {
                 }
             }
             let center_set_index: i32 = (self.value_list.len() / 2) as i32;
-            println!("{}", center_set_index);
             self.center_index = center_set_index;
+            self.center_track = self.value_list[center_set_index as usize];
+            */
         }
     }
     pub fn remove(&mut self, index: i32) {
@@ -98,8 +123,14 @@ impl RustedList {
         return self.current_size;
     }
 
+    pub fn get_list(&self) -> Vec<i32> {
+        return self.value_list.clone();
+    }
+
     pub fn get_new_insert_position(&self) {}
+
 }
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -130,9 +161,6 @@ mod tests {
         listing.insert(-1);
         listing.insert(4);
         listing.insert(7);
-        for i in 0..listing.len() {
-            println!("{}", listing.peek(i as i32));
-        }
-        assert_eq!(listing.len() as i32, 13);
+        assert_eq!(listing.get_list(), [-1, 0, 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9]);
     }
 }
