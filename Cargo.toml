@@ -3,9 +3,9 @@ name = "rusted_list"
 version = "0.1.1"
 authors = ["Liberatys <Ilithium@protonmail.com>"]
 edition = "2018"
-description = "A ever sorted list for rust"
+description = "A ever sorted list for rust that is operating on binary search"
 readme = "README.md"
-keywords = ["list","sorted","hacked"]
+keywords = ["list","sorted"]
 license = "MIT/Apache-2.0"
 
 [dependencies]

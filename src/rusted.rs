@@ -1,154 +1,78 @@
-pub struct RustedList {
-    left_track: i33,
-    center_track: i32,
-    right_track: i32,
-    value_list: Vec<i32>,
-    current_size: i32,
-    center_index: i32,
+#![deny(missing_docs)]
+/// Strcuture holding the vector of elements and the size of the vector for fast lookup
+pub struct Rusted {
+    vector: Vec<i32>,
+    size: i32,
 }
 
-impl RustedList {
-    pub fn new() -> RustedList {
-        return RustedList {
-            left_track: 1,
-            center_index: 0,
-            current_size: 0,
-            center_track: 0,
-            right_track: 0,
-            value_list: Vec::new(),
+impl Rusted {
+    /// create a new sorted list
+    pub fn new() -> Rusted {
+        return Rusted {
+            vector: Vec::new(),
+            size: 0,
         };
     }
-
+    /// insert a new elemenet into the list by using the binary search method
+    /// Complexity : O(log n)
     pub fn insert(&mut self, element: i32) {
-        if self.value_list.len() == 0 {
-            self.value_list.push(element);
-            self.left_track = element;
-            self.current_size = 1;
-        } else if self.value_list.len() == 1 {
-            self.current_size = 2;
-            if self.left_track > element {
-                self.value_list.insert(0, element);
-                self.right_track = self.left_track;
-                self.left_track = element;
-            } else {
-                self.value_list.push(element);
-                self.right_track = element;
-            }
-        } else if self.value_list.len() == 2 {
-            self.current_size = 3;
-            self.center_index = 1;
-            if element < self.left_track {
-                self.center_track = self.left_track;
-                self.left_track = element;
-                self.value_list.insert(0, element);
-            } else if element > self.right_track {
-                self.center_track = self.right_track;
-                self.right_track = element;
-                self.value_list.insert(2, element);
-            } else {
-                self.center_track = element;
-                self.value_list.insert(1, element);
-            }
-            self.center_track = self.value_list[self.center_index as usize];
-        } else {
-            self.current_size = self.current_size + 1;
-            let insert_pos = self.ret_insertion_pos(element);
-            if insert_pos == -1 {
-                return;
-            }
-            if element >= self.value_list[self.value_list.len() - 2] {
-                self.value_list.push(element);
-                return;
-            }
-            if element < self.value_list[0] {
-                self.value_list.insert(0, element);
-                return;
-            }
-            for i in 0..self.value_list.len() {
-                if element < self.value_list[i as usize] {
-                    self.value_list.insert(i - 1, element);
-                    return;
-                }
-            }
+        self.insert_element_binary(element, 0, self.size);
+    }
+    /// retreave the current size of the list
+    pub fn get_size(&self) -> i32 {
+        return self.size;
+    }
+    /// retreve the element at a position index by an i32.
+    /// If index smaller 0 or bigger size, will return -1
+    pub fn get_element_at(&self, index: i32) -> i32 {
+        if index < 0 {
+            return -1;
         }
-    }
-
-    fn ret_insertion_pos(&self, element: i32) -> i32 {
-        if element >= self.right_track {
-            return (self.value_list.len() - 1) as i32;
-        } else if element <= self.left_track {
-            return 0;
-        } else {
-            if element > self.center_track {
-                for i in self.center_index + 1..(self.value_list.len() as i32) {
-                    if element < self.value_list[i as usize] {
-                        return (i - 1) as i32;
-                    }
-                }
-                return -1;
-            } else {
-                for i in 0..self.center_index + 1 {
-                    if element < self.value_list[i as usize] {
-                        return i - 1;
-                    }
-                }
-                return -1;
-            }
+        if index > self.size - 1 {
+            return -1;
         }
+        return self.vector.get(index as usize).unwrap().clone();
     }
-
-    pub fn remove(&mut self, index: i32) {
-        self.value_list.remove(index as usize);
-    }
-
-    pub fn peek(&self, index: i32) -> i32 {
-        return self.value_list[index as usize];
-    }
-
-    pub fn sorted(&self) -> bool {
-        return true;
-    }
-
-    pub fn len(&self) -> i32 {
-        return self.current_size;
-    }
-
+    /// get all element as a vector
     pub fn get_list(&self) -> Vec<i32> {
-        return self.value_list.clone();
+        return self.vector.clone();
+    }
+    /// pop out the last element of the list
+    pub fn pop(&mut self) -> i32 {
+        self.size -= 1;
+        return self.vector.pop().unwrap();
     }
 
-    pub fn get_new_insert_position(&self) {}
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    #[test]
-    fn insert_value() {
-        let mut listing = RustedList::new();
-        listing.insert(1);
-        listing.insert(5);
-        assert_eq!(listing.peek(0), 1);
-    }
-
-    #[test]
-    fn remove_value() {
-        let mut listing = RustedList::new();
-        listing.insert(5);
-        listing.insert(10);
-        listing.remove(1);
-        assert_eq!(listing.peek(0), 5);
-    }
-
-    #[test]
-    fn multiple_insert() {
-        let mut listing = RustedList::new();
-        for i in 0..10 {
-            listing.insert(i);
+    fn insert_element_binary(&mut self, element: i32, min: i32, max: i32) {
+        if max == 0 {
+            self.size += 1;
+            self.vector.push(element);
+            return;
         }
-        listing.insert(-1);
-        listing.insert(4);
-        listing.insert(7);
-        assert_eq!(listing.get_list(), [-1, 0, 1, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9]);
+        if max == 1 {
+            if element > self.vector[0] {
+                self.vector.push(element);
+            } else {
+                self.vector.insert(0, element);
+            }
+            return;
+        }
+        if max - min == 1 {
+            self.size += 1;
+            if element < self.vector[max as usize] {
+                self.vector.insert((max) as usize, element);
+            } else {
+                self.vector.insert((max - 1) as usize, element);
+            }
+            return;
+        } else {
+            let middle = ((max + min) / 2) as i32;
+            let middle_value = self.vector[middle as usize];
+            if element < middle_value {
+                self.insert_element_binary(element, min, middle + 1);
+            } else {
+                self.insert_element_binary(element, middle, max);
+            }
+        }
     }
 }
