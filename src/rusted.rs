@@ -42,6 +42,12 @@ impl Rusted {
         self.size -= 1;
         return self.vector.pop().unwrap();
     }
+    /// Remvoing any dublicates in the list
+    /// Having a Complexity of O(n)
+    pub fn convert_to_set(&mut self) {
+        self.vector.dedup();
+        self.size = self.vector.len() as i32;
+    }
 
     fn insert_element_binary(&mut self, element: i32, min: i32, max: i32) {
         if max == 0 {
