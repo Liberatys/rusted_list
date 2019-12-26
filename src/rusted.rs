@@ -1,4 +1,3 @@
-#![deny(missing_docs)]
 /// Strcuture holding the vector of elements and the size of the vector for fast lookup
 pub struct Rusted {
     vector: Vec<i32>,
@@ -79,6 +78,27 @@ impl Rusted {
             } else {
                 self.insert_element_binary(element, middle, max);
             }
+        }
+    }
+    //
+    //return the sum for a rusted list as a i32
+    pub fn sum(&self) -> i32 {
+        let mut total_value: i32 = 0;
+        for i in &self.vector {
+            let val = self.vector[*i as usize];
+            total_value += val;
+        }
+        return total_value;
+    }
+    //return the median for a rusted list, which can be used to form graphs and statistics in a
+    //less error proune way when compared to the average
+    pub fn median(self) -> i32 {
+        let vec_size = self.vector.len();
+        if vec_size % 2 == 0 {
+            let middle = vec_size / 2;
+            return (self.vector[middle as usize] + self.vector[middle - 1 as usize]) / 2;
+        } else {
+            return self.vector[vec_size / 2 as usize];
         }
     }
 }

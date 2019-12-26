@@ -1,6 +1,6 @@
 [package]
 name = "rusted_list"
-version = "1.0.0"
+version = "1.1.0"
 authors = ["Liberatys <Ilithium@protonmail.com>"]
 edition = "2018"
 description = "A ever sorted list for rust that is operating on binary search"
